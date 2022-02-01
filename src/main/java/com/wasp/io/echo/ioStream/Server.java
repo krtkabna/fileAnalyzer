@@ -24,7 +24,7 @@ public class Server {
                 int count = 0;
                 //read while available()
                 if (inputStream.available() <= 0
-                        && (count += inputStream.read(buffer)) != -1) {
+                    && (count += inputStream.read(buffer)) != -1) {
                     System.out.println(new String(buffer, 0, count));
                     outputStream.write(ECHO);
                     outputStream.write(buffer, 0, count);
