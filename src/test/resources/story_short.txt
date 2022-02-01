@@ -1,0 +1,1 @@
+When the server code encounters the accept method, it blocks until a client makes a connection request to it. If everything goes well, the server accepts the connection. Upon acceptance, the server gets a new socket, clientSocket, bound to the same local port, 6666, and also has its remote endpoint set to the address and port of the client.

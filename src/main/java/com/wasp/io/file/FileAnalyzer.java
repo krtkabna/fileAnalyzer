@@ -1,4 +1,4 @@
-package com.wasp.io.fileAnalyzer;
+package com.wasp.io.file;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class FileAnalyzer {
     private static final String WORD_REGEX_FORMAT = "\\b%s\\b";
-    private static final String SENTENCE_REGEX = "[^.!?]*[.!?]";
     private static final String END_PUNCTUATION_REGEX = "[.?!]";
     private static final String STORY_PATH = "/Users/wasp/luxoft/upskilling/fileAnalyzer/src/test/resources/story.txt";
     private static final String SHORT_STORY_PATH = "/Users/wasp/luxoft/upskilling/fileAnalyzer/src/test/resources/story_short.txt";
