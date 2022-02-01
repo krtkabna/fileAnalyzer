@@ -39,6 +39,7 @@ public class BufferedOutputStream extends OutputStream {
             System.arraycopy(b, off, buffer, offset, len);
             offset += len;
         } else if (len >= buffer.length) {
+            //FIXME: should write to buffer. and what if len is a couple times bigger than buffer?
             flushBuffer();
             target.write(b, off, len);
         } else if (len > buffer.length - offset) {
