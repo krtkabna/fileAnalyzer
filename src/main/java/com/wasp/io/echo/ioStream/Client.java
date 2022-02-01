@@ -1,4 +1,4 @@
-package com.wasp.io.echo.inputOutputStream;
+package com.wasp.io.echo.ioStream;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
