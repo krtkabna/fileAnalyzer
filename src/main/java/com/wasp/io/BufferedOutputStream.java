@@ -31,15 +31,21 @@ public class BufferedOutputStream extends OutputStream {
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         throwIOExceptionIfClosed();
-        if (len > buffer.length - offset) {
-            flushBufferIfIndexOOB();
-        }
-        if (len >= buffer.length) {
-            flushBufferIfIndexOOB();
+
+        //off = 0, len < buffer: write to buffer, arraycopy
+        //len > buffer: write to target
+        //len > buffer - offset: flush, write rest to buf
+        if (len < buffer.length - offset) {
+            System.arraycopy(b, off, buffer, offset, len);
+            offset += len;
+        } else if (len >= buffer.length) {
+            flushBuffer();
             target.write(b, off, len);
+        } else if (len > buffer.length - offset) {
+            flushBuffer();
+            System.arraycopy(b, off, buffer, 0, len);
+            offset = len;
         }
-        System.arraycopy(b, off, buffer, offset, len);
-        offset += len;
     }
 
     @Override
@@ -53,6 +59,10 @@ public class BufferedOutputStream extends OutputStream {
         flush();
         target.close();
         closed = true;
+    }
+
+    int getBufferSize() {
+        return buffer.length;
     }
 
     private void flushBuffer() throws IOException {

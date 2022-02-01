@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BufferedOutputStreamTests {
     private static final String FILE_PATH = "src/test/resources/test.txt";
+    private static final String OUT_LONG = "hello everybody yes today";
+    private static final int OUT_LONG_SIZE = "hello everybody yes today".length();
     private static final String OUT = "hello io";
     private static final String OUT_WITH_OFFSET = "hi everyone";
     private static final int OUT_WITH_OFFSET_SIZE_TRIMMED = "everyone".length();
@@ -68,15 +70,27 @@ public class BufferedOutputStreamTests {
     }
 
     @Test
-    void writeLenFromOffset() throws IOException {
-        byte[] bytes = OUT_WITH_OFFSET.getBytes();
+    void writeLenFromOffset_biggerThanBuffer() throws IOException {
+        System.out.println("OUT_LONG_SIZE = " + OUT_LONG_SIZE);
+        byte[] bytes = OUT_LONG.getBytes();
 
+        try {
+            bufferedOutputStream.write(bytes, 0, OUT_LONG_SIZE);
+        } finally {
+            bufferedOutputStream.close();
+        }
+
+        compareContentsAndPrint(OUT_LONG);
+    }
+
+    @Test
+    void writeLenFromOffset_withOffset() throws IOException {
+        byte[] bytes = OUT_WITH_OFFSET.getBytes();
         try {
             bufferedOutputStream.write(bytes, 3, OUT_WITH_OFFSET_SIZE_TRIMMED);
         } finally {
             bufferedOutputStream.close();
         }
-
         compareContentsAndPrintWithOffset();
     }
 
@@ -128,14 +142,15 @@ public class BufferedOutputStreamTests {
     }
 
     /**
-     * Compares <code>BufferedOutputStream</code>'s contents with <code>toWrite</code> and prints them
+     * Compares <code>BufferedOutputStream</code>'s contents with <code>compareWith</code> and prints them
      *
+     * @param compareWith a String to which we compare <code>BufferedOutputStream</code>'s contents
      * @throws IOException
      */
-    private void compareContentsAndPrint() throws IOException {
+    private void compareContentsAndPrint(String compareWith) throws IOException {
         try (InputStream in = createInputStream()) {
             int read;
-            for (byte b : OUT.getBytes()) {
+            for (byte b : compareWith.getBytes()) {
 //                System.out.println(in.read()); //fixme remove
                 if ((read = in.read()) != -1) {
                     System.out.print((char) read);
@@ -146,17 +161,19 @@ public class BufferedOutputStreamTests {
         }
     }
 
+    private void compareContentsAndPrint() throws IOException {
+        compareContentsAndPrint(OUT);
+    }
+
     private void compareContentsAndPrintWithOffset() throws IOException {
         try (InputStream in = createInputStream()) {
             byte[] src = OUT_WITH_OFFSET.getBytes();
             byte[] bytes = new byte[OUT_WITH_OFFSET_SIZE_TRIMMED];
-            //for 'hello io' srcPos = 6, length = 2
             //TODO fix test
-            System.arraycopy(src, 3, src, 0, bytes.length - 1);//everyone
+            System.arraycopy(src, 3, src, 0, OUT_WITH_OFFSET_SIZE_TRIMMED);//everyone
             int read;
             for (byte b : bytes) {
-                read = in.read();
-                if (read != -1) {
+                if ((read = in.read()) != -1) {
                     System.out.print((char) read);
                     assertEquals(read, b);
                 }
