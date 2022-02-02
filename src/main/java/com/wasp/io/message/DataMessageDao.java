@@ -38,11 +38,4 @@ public class DataMessageDao implements MessageDao {
         int amount = inputStream.readInt();
         return new Message(date, new String(rawMessage), amount);
     }
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        MessageDao messageDao = new DataMessageDao();
-        messageDao.save(new Message(new Date(), "hello there", 42));
-        Message message = messageDao.load();
-        System.out.println(message);
-    }
 }
