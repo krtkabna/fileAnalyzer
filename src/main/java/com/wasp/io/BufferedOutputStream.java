@@ -23,23 +23,13 @@ public class BufferedOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(byte[] b) throws IOException {
-        throwIOExceptionIfClosed();
-        write(b, 0, b.length);
-    }
-
-    @Override
     public void write(byte[] b, int off, int len) throws IOException {
         throwIOExceptionIfClosed();
 
-        //off = 0, len < buffer: write to buffer, arraycopy
-        //len > buffer: write to target
-        //len > buffer - offset: flush, write rest to buf
         if (len < buffer.length - offset) {
             System.arraycopy(b, off, buffer, offset, len);
             offset += len;
         } else if (len >= buffer.length) {
-            //FIXME: should write to buffer. and what if len is a couple times bigger than buffer?
             flushBuffer();
             target.write(b, off, len);
         } else if (len > buffer.length - offset) {
