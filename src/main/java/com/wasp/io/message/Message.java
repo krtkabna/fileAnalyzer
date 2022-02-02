@@ -5,13 +5,13 @@ import java.util.Date;
 
 public class Message implements Serializable {
     private Date date;
-    private int amount;
     private String message;
+    private int amount;
 
-    public Message(Date date, int amount, String message) {
+    public Message(Date date, String message, int amount) {
         this.date = date;
-        this.amount = amount;
         this.message = message;
+        this.amount = amount;
     }
 
     public Date getDate() {
