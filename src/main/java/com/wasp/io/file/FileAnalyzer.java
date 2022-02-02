@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public final class FileAnalyzer {
     private static final String WORD_REGEX_FORMAT = "\\b%s\\b";
-    private static final String END_PUNCTUATION_REGEX = "[.?!]";
     private static final String STORY_PATH = "/Users/wasp/luxoft/upskilling/fileAnalyzer/src/test/resources/story.txt";
     private static final String SHORT_STORY_PATH = "/Users/wasp/luxoft/upskilling/fileAnalyzer/src/test/resources/story_short.txt";
     private static final int DEFAULT_BUFFER_SIZE = 1024;
@@ -60,29 +59,25 @@ public final class FileAnalyzer {
         return sentences;
     }
 
-    private static List<String> filterSentences(List<String> sentences, String delimiterRegex, Pattern wordPattern) {
+    private static List<String> filterSentences(List<String> sentences, Pattern wordPattern) {
         return sentences.stream()
             .filter(wordPattern.asPredicate())
             .map(s -> s.replaceAll("\\s", " ").trim())
             .collect(Collectors.toList());
     }
 
-    private static List<String> filterSentences(List<String> sentences, Pattern word) {
-        return filterSentences(sentences, END_PUNCTUATION_REGEX, word);
-    }
-
-    private static List<String> filterSentences(BufferedInputStream in, Pattern word) throws IOException {
-        return filterSentences(readAllSentences(in), END_PUNCTUATION_REGEX, word);
+    private static List<String> filterSentences(BufferedInputStream in, Pattern wordPattern) throws IOException {
+        return filterSentences(readAllSentences(in), wordPattern);
     }
 
 
-    private static long countWordOccurrences(List<String> sentences, Pattern word) {
+    private static long countWordOccurrences(List<String> sentences, Pattern wordPattern) {
         long count = 0;
         String[] words;
         for (String sentence : sentences) {
             words = array(sentence);
             count += Arrays.stream(words)
-                .filter(word.asPredicate())
+                .filter(wordPattern.asPredicate())
                 .count();
         }
         return count;

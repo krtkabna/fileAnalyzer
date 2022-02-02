@@ -60,9 +60,10 @@ public final class FileManager {
         File destination = new File(to);
         checkSourceExists(source);
         if (destination.exists()) {
-            throw re("File already exists");
+            throw getRuntimeException("File already exists");
         }
         if (source.isDirectory()) {
+            //fixme
             createDirectory(source, destination);
         } else if (source.isFile()) {
             createFile(destination);
@@ -83,15 +84,16 @@ public final class FileManager {
 
     static boolean createDirectory(File source, File destination) {
         boolean result = false;
-        List<File> subFiles = getSubFiles(source);
-        if (subFiles.isEmpty()) {
+        List<File> sourceSubFiles = getSubFiles(source);
+        if (sourceSubFiles.isEmpty()) {
             result = destination.mkdir();
         } else {
-            for (File file : subFiles) {
+            //fixme go through destination, not source
+            for (File file : sourceSubFiles) {
                 if (file.isDirectory()) {
-                    result = file.mkdirs();
+                    result = destination.mkdirs();
                 } else if (file.isFile()) {
-                    result = createFile(file);
+                    result = createFile(destination);
                 }
             }
         }
@@ -112,7 +114,7 @@ public final class FileManager {
 
     static List<File> getSubFiles(File source) {
         if (!source.isDirectory()) {
-            throw re("Source should be a directory: " + source.getPath());
+            throw getRuntimeException("Source should be a directory: " + source.getPath());
         }
         List<File> result = new ArrayList<>();
         List<File> deepFiles = Arrays.asList(source.listFiles());
@@ -127,11 +129,11 @@ public final class FileManager {
 
     private static void checkSourceExists(File source) {
         if (!source.exists()) {
-            throw re("Nothing exists by this path: " + source.getPath());
+            throw getRuntimeException("Nothing exists by this path: " + source.getPath());
         }
     }
 
-    private static RuntimeException re(String msg) {
+    private static RuntimeException getRuntimeException(String msg) {
         return new RuntimeException(msg);
     }
 }
