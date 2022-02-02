@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class FileAnalyzer {
+public final class FileAnalyzer {
     private static final String WORD_REGEX_FORMAT = "\\b%s\\b";
     private static final String END_PUNCTUATION_REGEX = "[.?!]";
     private static final String STORY_PATH = "/Users/wasp/luxoft/upskilling/fileAnalyzer/src/test/resources/story.txt";

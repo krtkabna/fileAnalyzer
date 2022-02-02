@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileManager {
+public final class FileManager {
 
     /**
      * Method that counts files in a given directory and all subdirectories
