@@ -12,7 +12,7 @@ public class Server {
     private static final String ECHO = "echo ";
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(4000);
+        ServerSocket serverSocket = new ServerSocket(3000);
 
         while (true) {
             try (Socket socket = serverSocket.accept();
