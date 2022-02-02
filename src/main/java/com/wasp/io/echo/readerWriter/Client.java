@@ -8,16 +8,29 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class Client {
-    private static final String MSG = "Hello from client\r\n";
+    private static final String EXIT = "exit";
+    private static final String ENDLINE = "\r\n";
 
     public static void main(String[] args) throws IOException {
-        try (Socket socket = new Socket("localhost", 3000);
-             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-            writer.write(MSG);
-            writer.flush();
-            String response = reader.readLine();
-            System.out.println(response);
+        while (true) {
+            try (Socket socket = new Socket("localhost", 3000);
+                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+                BufferedReader cli = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Enter message: ");
+                String msg = cli.readLine();
+                if (msg.equalsIgnoreCase(EXIT)) {
+                    writer.write("EXIT\r\n");
+                    writer.flush();
+                    cli.close();
+                    break;
+                }
+                writer.write(msg + ENDLINE);
+                writer.flush();
+                String response = reader.readLine();
+                System.out.println(response);
+            }
         }
+
     }
 }

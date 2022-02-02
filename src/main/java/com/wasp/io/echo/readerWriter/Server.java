@@ -10,6 +10,8 @@ import java.net.Socket;
 
 public class Server {
     private static final String ECHO = "echo ";
+    private static final String EXIT = "EXIT";
+    private static final String SERVER_CLOSE_MSG = "EXIT has been called\r\n";
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(3000);
@@ -18,12 +20,15 @@ public class Server {
             try (Socket socket = serverSocket.accept();
                  BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                  BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
-                String input;
-                if (reader.ready() && (input = reader.readLine()) != null) {
-                    String output = ECHO + input;
-                    writer.write(output);
-                    System.out.println(output);
+                String input = reader.readLine();
+                if (EXIT.equalsIgnoreCase(input)) {
+                    System.out.println(SERVER_CLOSE_MSG);
+                    break;
                 }
+                String output = ECHO + input;
+                writer.write(output);
+                writer.flush();
+                System.out.println(output);
             }
         }
     }

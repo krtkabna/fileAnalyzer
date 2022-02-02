@@ -1,4 +1,4 @@
-package com.wasp.io;
+package com.wasp.io.bufferedStream;
 
 import java.io.IOException;
 import java.io.OutputStream;
