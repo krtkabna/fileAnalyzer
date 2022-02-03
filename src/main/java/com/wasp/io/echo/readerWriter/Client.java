@@ -12,6 +12,7 @@ import static java.lang.System.lineSeparator;
 public class Client {
     private static final String EXIT = "exit";
     private static final String ENDLINE = lineSeparator();
+    private static final String CLIENT_CLOSE_MSG = "EXIT has been called\r\n";
 
     public static void main(String[] args) throws IOException {
         while (true) {
@@ -25,6 +26,7 @@ public class Client {
                     writer.write(EXIT + ENDLINE);
                     writer.flush();
                     cli.close();
+                    System.out.println(CLIENT_CLOSE_MSG);
                     break;
                 }
                 writer.write(msg + ENDLINE);
