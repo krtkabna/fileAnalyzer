@@ -1,5 +1,6 @@
 package com.wasp.io;
 
+import com.wasp.io.bufferedStream.BufferedOutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
@@ -24,23 +25,6 @@ public class BufferedOutputStreamTests {
     @BeforeEach
     public void init() {
         bufferedOutputStream = createOutputStream();
-    }
-
-//    @AfterEach
-//    public void clear() throws IOException {
-//        clearFile();
-//    }
-
-    private void clearFile() throws IOException {
-        try (InputStream fileInputStream = createInputStream()) {
-            clearFile(fileInputStream);
-        }
-    }
-
-    private void clearFile(InputStream fileInputStream) throws IOException {
-        while (fileInputStream.read() != -1) {
-            bufferedOutputStream.write(-1);
-        }
     }
 
     @Test
@@ -121,7 +105,7 @@ public class BufferedOutputStreamTests {
         assertThrows(IOException.class, () -> bufferedOutputStream.write(OUT.getBytes()));
     }
 
-    private RuntimeException re(IOException e) {
+    private RuntimeException getRuntimeException(IOException e) {
         return new RuntimeException(e.getMessage(), e);
     }
 
@@ -129,7 +113,7 @@ public class BufferedOutputStreamTests {
         try {
             return new FileInputStream(FILE_PATH);
         } catch (FileNotFoundException e) {
-            throw re(e);
+            throw getRuntimeException(e);
         }
     }
 
@@ -137,7 +121,7 @@ public class BufferedOutputStreamTests {
         try {
             return new BufferedOutputStream(new FileOutputStream(FILE_PATH));
         } catch (FileNotFoundException e) {
-            throw re(e);
+            throw getRuntimeException(e);
         }
     }
 

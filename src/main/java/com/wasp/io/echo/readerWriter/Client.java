@@ -7,9 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import static java.lang.System.lineSeparator;
+
 public class Client {
     private static final String EXIT = "exit";
-    private static final String ENDLINE = "\r\n";
+    private static final String ENDLINE = lineSeparator();
 
     public static void main(String[] args) throws IOException {
         while (true) {
