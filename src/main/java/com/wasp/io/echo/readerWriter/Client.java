@@ -20,7 +20,7 @@ public class Client {
                 System.out.print("Enter message: ");
                 String msg = cli.readLine();
                 if (msg.equalsIgnoreCase(EXIT)) {
-                    writer.write("EXIT\r\n");
+                    writer.write(EXIT + ENDLINE);
                     writer.flush();
                     cli.close();
                     break;
